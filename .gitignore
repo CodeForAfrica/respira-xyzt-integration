@@ -2,3 +2,19 @@
 venv
 .venv
 .ds_store
+__pycache__
+
+
+# Auto created folders and files  - ignore
+data_batches/
+ml_data/
+ml_data/by_location/
+data_batches_new_sources/
+ml_data_new_sources/
+batch_counter_new_sources.txt
+uploaded_files_new_sources.txt
+last_timestamp.txt
+batch_counter.txt
+uploaded_files.txt
+last_health_upload.txt
+pipeline.lock
