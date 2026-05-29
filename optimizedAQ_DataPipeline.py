@@ -32,6 +32,9 @@ import pandas as pd
 import pytz
 import requests
 from dateutil import parser as dtparser
+from dotenv import load_dotenv
+
+load_dotenv()
 
 warnings.filterwarnings(
     "ignore", message="Mean of empty slice", category=RuntimeWarning
@@ -42,16 +45,16 @@ warnings.filterwarnings(
 
 
 # === SENSORS.AFRICA CONFIGURATION ===
-SENSORSAFRICA_USERNAME = ""
-SENSORSAFRICA_PASSWORD = ""
-CITY = "Nakuru"
-COUNTRY = "Kenya"
+SENSORSAFRICA_USERNAME = os.getenv("SENSORSAFRICA_USERNAME", "")
+SENSORSAFRICA_PASSWORD = os.getenv("SENSORSAFRICA_PASSWORD", "")
+CITY = os.getenv("CITY", "Nakuru")
+COUNTRY = os.getenv("COUNTRY", "Kenya")
 
 # === PLATFORM-XYZT CONFIGURATION ===
-PLATFORM_USER = ""
-PLATFORM_PASSWORD = ""
-PLATFORM_URL = "https://api.platform-xyzt.ai/"
-DATASET_ID = ""  # sensor readings dataset
+PLATFORM_USER = os.getenv("PLATFORM_USER", "")
+PLATFORM_PASSWORD = os.getenv("PLATFORM_PASSWORD", "")
+PLATFORM_URL = os.getenv("PLATFORM_URL", "https://api.platform-xyzt.ai/")
+DATASET_ID = os.getenv("DATASET_ID", "")  # sensor readings dataset
 
 # =====================================================================================
 # === PATH CONFIGURATION ===

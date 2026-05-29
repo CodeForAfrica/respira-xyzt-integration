@@ -21,6 +21,9 @@ import pandas as pd
 import pytz
 import requests
 from dateutil import parser as dtparser
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 warnings.filterwarnings(
     "ignore", message="Mean of empty slice", category=RuntimeWarning
@@ -32,8 +35,8 @@ warnings.filterwarnings(
 
 # -- Config -------------------------------------------------------------------
 
-PLATFORM_URL = "https://api.platform-xyzt.ai/"
-NEW_SOURCE_DATASET_ID = ""
+PLATFORM_URL = os.getenv("PLATFORM_URL", "https://api.platform-xyzt.ai/")
+NEW_SOURCE_DATASET_ID = os.getenv("NEW_SOURCE_DATASET_ID", "")
 
 BASE_DIR = os.path.join(r"Automation Scripts")
 SAVE_DIR = os.path.join(BASE_DIR, "data_batches_new_sources")
