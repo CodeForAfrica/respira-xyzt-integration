@@ -12,10 +12,9 @@ Two cooperating scripts:
 
 ## Folder layout
 
-This folder must keep its name (`Automation Scripts`) — both scripts hardcode it as `BASE_DIR`. Everything they create lives inside it.
 
 ```
-Automation Scripts/
+respira-xyzt-integration/
 ├── optimizedAQ_DataPipeline.py     ← main orchestrator (entry point)
 ├── new_sources_pipeline.py         ← IQAir + SCI module
 ├── requirements.txt
@@ -33,7 +32,7 @@ Automation Scripts/
             └── sensor_<id>_YYYY-MM.csv
 ```
 
-Runtime state files (also created automatically inside `Automation Scripts/`):
+Runtime state files also created automatically in the root folder:
 
 | File | Purpose |
 |---|---|
@@ -50,7 +49,7 @@ Runtime state files (also created automatically inside `Automation Scripts/`):
 
 - **Python 3.9 or newer** (the code uses `dict[str, list]` style annotations, which need 3.9+).
 - Network access to: `api.sensors.africa`, `device.iqair.com`, `sensor.sci-monitoring.com`, `api.platform-xyzt.ai`.
-- Working credentials for sensors.africa and the XYZT platform (currently hardcoded at the top of `optimizedAQ_DataPipeline.py` — see [Configuration](#configuration)).
+- Working credentials for sensors.africa and the XYZT platform  `optimizedAQ_DataPipeline.py`.
 
 Python packages: `numpy`, `pandas`, `pytz`, `requests`, `python-dateutil`.
 
@@ -58,7 +57,7 @@ Python packages: `numpy`, `pandas`, `pytz`, `requests`, `python-dateutil`.
 
 ## Setup
 
-From the folder that **contains** `Automation Scripts/` (not from inside it — see [Running](#running) for why):
+From the root folder
 
 ```bash
 # 1. Create and activate a virtual environment (recommended)
@@ -71,7 +70,7 @@ source venv/bin/activate
 .\venv\Scripts\Activate.ps1
 
 # 2. Install dependencies
-pip install -r "Automation Scripts/requirements.txt"
+pip install -r "requirements.txt"
 ```
 
 ---
@@ -81,14 +80,12 @@ pip install -r "Automation Scripts/requirements.txt"
 ### Run the full pipeline (the normal case)
 
 ```bash
-# Stand in the PARENT of "Automation Scripts" — not inside it
-cd /path/to/parent
+# c
 
 # Start the orchestrator
-python "Automation Scripts/optimizedAQ_DataPipeline.py"
+python "optimizedAQ_DataPipeline.py"
 ```
 
-**Why the parent directory?** The scripts use `BASE_DIR = "Automation Scripts"` as a *relative* path. They resolve every input/output (batches, ML files, counters, lockfile) relative to your current working directory. If you `cd` into the folder and run from there, everything ends up under `Automation Scripts/Automation Scripts/…` — wrong. Always run from the parent.
 
 What happens once it's running:
 
@@ -112,7 +109,7 @@ If the process is killed hard (power loss, SIGKILL) and the lockfile is left beh
 
 ```bash
 cd /path/to/parent
-python "Automation Scripts/new_sources_pipeline.py"
+python "new_sources_pipeline.py"
 ```
 
 In standalone mode it fetches one fixed test window (see `TEST_START` / `TEST_END` at the bottom of the file), saves a batch and ML files, and exits. **It does not upload** when run standalone — uploads only happen via the orchestrator, which provides the XYZT token.
@@ -127,10 +124,10 @@ All knobs live near the top of each file as plain module-level constants.
 
 | Constant | Default | Meaning |
 |---|---|---|
-| `SENSORSAFRICA_USERNAME` / `_PASSWORD` | hardcoded | sensors.africa API credentials |
+| `SENSORSAFRICA_USERNAME` / `_PASSWORD` | sensors.africa API credentials |
 | `CITY`, `COUNTRY` | `"Nakuru"`, `"Kenya"` | Sensor location filter |
-| `PLATFORM_USER` / `_PASSWORD` | hardcoded | XYZT platform credentials |
-| `DATASET_ID` | hardcoded | XYZT dataset for sensors.africa data |
+| `PLATFORM_USER` / `_PASSWORD` | XYZT platform credentials |
+| `DATASET_ID` | XYZT dataset for sensors.africa data |
 | `FETCH_WINDOW_MINUTES` | `300` | How much time to ingest per loop iteration |
 | `SLEEP_BETWEEN_FETCH_LOOPS` | `1800` | Seconds between iterations (30 min) |
 | `FORCED_START_DATE` | `"2025-07-01T00:00:00Z"` | Used **only** when `last_timestamp.txt` is missing or empty |
@@ -179,13 +176,13 @@ Accumulate across batches. New rows are appended on the fast path; deduplication
 ## Troubleshooting
 
 **"Another instance is already running (PID …). Exiting."**
-Either another copy really is running, or a previous run died without cleaning up. Check with `ps -p <PID>` (Linux/macOS) or Task Manager (Windows). If the PID is gone, just delete `Automation Scripts/pipeline.lock` and start again.
+Either another copy really is running, or a previous run died without cleaning up. Check with `ps -p <PID>` (Linux/macOS) or Task Manager (Windows). If the PID is gone, just delete `pipeline.lock` and start again.
 
 **Pipeline keeps logging "Already caught up to current time."**
 You've ingested up to "now". Expected behaviour — it will sleep `SLEEP_BETWEEN_FETCH_LOOPS` and check again.
 
 **Want to re-process a time range?**
-Stop the pipeline, edit `Automation Scripts/last_timestamp.txt` to your desired start time (ISO 8601 UTC, e.g. `2025-07-01T00:00:00Z`), and restart. The batch counter will keep advancing — old batches won't be overwritten.
+Stop the pipeline, edit `last_timestamp.txt` to your desired start time (ISO 8601 UTC, e.g. `2025-07-01T00:00:00Z`), and restart. The batch counter will keep advancing — old batches won't be overwritten.
 
 **Upload returns 401 / 403**
 The XYZT token has expired or the credentials are wrong. The pipeline requests a fresh token at the start of every upload cycle, so transient expirations resolve themselves. Persistent failures mean credentials need updating in `optimizedAQ_DataPipeline.py`.

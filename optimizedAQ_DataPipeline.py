@@ -59,7 +59,7 @@ DATASET_ID = os.getenv("XYZT_SENSORSAFRICA_DATASET_ID", "")  # sensor readings d
 # =====================================================================================
 # === PATH CONFIGURATION ===
 # =====================================================================================
-BASE_DIR = os.path.join(r"Automation Scripts")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SAVE_DIR = os.path.join(BASE_DIR, "data_batches")
 ML_DATA_DIR = os.path.join(BASE_DIR, "ml_data")
 ML_LOCATION_DIR = os.path.join(ML_DATA_DIR, "by_location")

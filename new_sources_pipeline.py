@@ -38,7 +38,7 @@ warnings.filterwarnings(
 PLATFORM_URL = os.getenv("PLATFORM_URL", "https://api.platform-xyzt.ai/")
 NEW_SOURCE_DATASET_ID = os.getenv("XYZT_SCI_DATASET_ID", "")
 
-BASE_DIR = os.path.join(r"Automation Scripts")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SAVE_DIR = os.path.join(BASE_DIR, "data_batches_new_sources")
 ML_LOCATION_DIR = os.path.join(BASE_DIR, "ml_data_new_sources", "by_location")
 BATCH_COUNTER_FILE = os.path.join(BASE_DIR, "batch_counter_new_sources.txt")
