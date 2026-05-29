@@ -51,10 +51,10 @@ CITY = os.getenv("CITY", "Nakuru")
 COUNTRY = os.getenv("COUNTRY", "Kenya")
 
 # === PLATFORM-XYZT CONFIGURATION ===
-PLATFORM_USER = os.getenv("PLATFORM_USER", "")
-PLATFORM_PASSWORD = os.getenv("PLATFORM_PASSWORD", "")
+PLATFORM_USER = os.getenv("XYZT_USER", "")
+PLATFORM_PASSWORD = os.getenv("XYZT_PASSWORD", "")
 PLATFORM_URL = os.getenv("PLATFORM_URL", "https://api.platform-xyzt.ai/")
-DATASET_ID = os.getenv("DATASET_ID", "")  # sensor readings dataset
+DATASET_ID = os.getenv("XYZT_SENSORSAFRICA_DATASET_ID", "")  # sensor readings dataset
 
 # =====================================================================================
 # === PATH CONFIGURATION ===

@@ -36,7 +36,7 @@ warnings.filterwarnings(
 # -- Config -------------------------------------------------------------------
 
 PLATFORM_URL = os.getenv("PLATFORM_URL", "https://api.platform-xyzt.ai/")
-NEW_SOURCE_DATASET_ID = os.getenv("NEW_SOURCE_DATASET_ID", "")
+NEW_SOURCE_DATASET_ID = os.getenv("XYZT_SCI_DATASET_ID", "")
 
 BASE_DIR = os.path.join(r"Automation Scripts")
 SAVE_DIR = os.path.join(BASE_DIR, "data_batches_new_sources")
